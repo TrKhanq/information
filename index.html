@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile | Nguyễn Trọng Khang - PTIT</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        /* --- CSS VARIABLES & RESET --- */
+        :root {
+            --primary-color: #ff304f; /* Màu đỏ tươi, nịnh mắt hơn */
+            --secondary-color: #00f2ff; /* Màu Cyan Cyberpunk */
+            --bg-color: #0b0d15;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+        html{
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3, .brand {
+            font-family: 'Exo 2', sans-serif;
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+
+        /* --- BACKGROUND CANVAS --- */
+        #canvas-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: rgba(11, 13, 21, 0.8);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-shadow: 0 0 10px rgba(255, 48, 79, 0.5);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a:hover {
+            color: var(--secondary-color);
+            text-shadow: 0 0 8px var(--secondary-color);
+        }
+
+        /* --- SECTION GENERAL --- */
+        section {
+            padding: 80px 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+            scroll-margin-top: 90px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-title::after {
+            content: '';
+            width: 60px;
+            height: 4px;
+            background: var(--primary-color);
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 10px var(--primary-color);
+        }
+        
+        /* ------------------------------------------- */
+        /* --- HERO & ACHIEVEMENTS COMBINED (CĂN GIỮA) --- */
+        /* ------------------------------------------- */
+        .hero {
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 80px 80px;
+            position: relative;
+            margin-top: 3%;
+        }
+
+        .hero-and-achievements-container {
+            /* SỬ DỤNG FLEXBOX ĐỂ CĂN GIỮA NỘI DUNG */
+            display: flex;
+            width: 100%;
+            max-width: 1200px; 
+            gap: 40px;
+            align-items: flex-start;
+            margin: 0 auto; 
+            justify-content: center; 
+        }
+
+        /* A. Khối Thành tích (Bên Trái) */
+        .achievements-side-block {
+            flex: 3; 
+            padding: 20px 0;
+            min-width: 60%; 
+        }
+        
+        /* B. Khối Avatar & Info (Bên Phải) */
+        .intro-info-block {
+            flex: 1; 
+            max-width: 300px; 
+            padding: 40px 20px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.1);
+            margin-top: 150px;
+            margin-left: 0;
+            margin-right: 0;
+        }
+        
+        /* ACHIEVEMENTS CARDS (Grid mặc định cho các thẻ 200px) */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        /* FIX: CĂN GIỮA TIÊU ĐỀ THÀNH TÍCH CŨ */
+        .achievements-side-block .section-title {
+            text-align: center;
+            margin-bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: inline-block;
+        }
+
+        /* ------------------------------------------- */
+        /* --- KHỐI THÀNH TỰU ĐÁNG NỂ (Đã tách ra) --- */
+        /* ------------------------------------------- */
+        #notable-achievements {
+            padding-top: 20px; 
+            padding-bottom: 50px;
+        }
+        .notable-achievements-block {
+            /* Giữ nguyên style này cho khối nội dung */
+        }
+        
+        /* Cập nhật: Buộc 4 cột cố định cho khối counter */
+        .notable-achievements-block .achievements-grid {
+             grid-template-columns: repeat(4, 1fr);
+             gap: 30px; 
+             padding: 0 20px; /* Thêm padding nhẹ để tránh dính lề */
+        }
+        
+        .counter-card {
+            text-align: center;
+            background: rgba(0, 242, 255, 0.05); 
+            border-color: rgba(0, 242, 255, 0.2); 
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.1);
+        }
+        .counter-card .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .counter-card h3.counter-number {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-shadow: 0 0 10px rgba(255, 48, 79, 0.6);
+            margin: 0;
+            line-height: 1;
+        }
+        .counter-card p {
+            color: var(--text-muted);
+            margin-top: 5px;
+            font-size: 0.9rem;
+        }
+
+        /* Inner Container cho Avatar | Info */
+        .hero-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 100%;
+            gap: 20px;
+        }
+        
+        .avatar-container {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 3px solid var(--secondary-color);
+            box-shadow: 0 0 25px var(--secondary-color);
+            overflow: hidden;
+            background: #222;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin-bottom: 0;
+        }
+
+        .avatar-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #fff, var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
+
+        .typing-text {
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            min-height: 1.6em;
+            font-weight: bold;
+        }
+        
+        /* CARD STYLES */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px) scale(1.01);
+            border-color: var(--secondary-color);
+            box-shadow: 0 8px 25px rgba(0, 242, 255, 0.15);
+        }
+
+        .scroll-down {
+            position: absolute;
+            bottom: 30px;
+            animation: bounce 2s infinite;
+            opacity: 0.7;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+        
+        /* --- SKILLS --- */
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .skill-tag {
+            background: var(--card-bg);
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            color: var(--secondary-color);
+            font-weight: 700;
+            font-family: 'Exo 2', sans-serif;
+            transition: 0.3s;
+            box-shadow: 0 0 10px rgba(0, 242, 255, 0.1);
+        }
+
+        .skill-tag i {
+            font-size: 1.2rem;
+            margin-right: 8px;
+        }
+
+        .skill-tag:hover {
+            background: rgba(0, 242, 255, 0.1);
+            color: #fff;
+            box-shadow: 0 0 15px var(--secondary-color);
+        }
+        
+        /* --- PROJECTS SECTION (NEW) --- */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .project-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 48, 79, 0.2); /* Use primary color border */
+            padding: 25px;
+            border-radius: 15px;
+            transition: 0.4s;
+            box-shadow: 0 0 15px rgba(255, 48, 79, 0.05);
+            min-height: 220px;
+        }
+        .project-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+            box-shadow: 0 8px 30px rgba(255, 48, 79, 0.2);
+        }
+        .project-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        .project-tag {
+            display: inline-block;
+            background: rgba(0, 242, 255, 0.1);
+            color: var(--secondary-color);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            margin-top: 10px;
+            font-weight: 700;
+        }
+
+        /* --- FEEDBACK SECTION (NEW) --- */
+        #contact {
+            padding-bottom: 40px; 
+        }
+        .feedback-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .feedback-form label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--secondary-color);
+            font-weight: 700;
+        }
+        .feedback-form input[type="text"],
+        .feedback-form input[type="email"],
+        .feedback-form textarea {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+            border-radius: 8px;
+            transition: border-color 0.3s;
+        }
+        .feedback-form input:focus,
+        .feedback-form textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 8px rgba(255, 48, 79, 0.5);
+        }
+        .feedback-form textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: var(--primary-color);
+            color: var(--bg-color);
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 48, 79, 0.4);
+        }
+        .submit-btn:hover {
+            background: #ff5c73;
+            box-shadow: 0 5px 20px rgba(255, 48, 79, 0.8);
+        }
+        .form-message {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--secondary-color);
+            font-weight: bold;
+            min-height: 20px;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        footer a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Cập nhật Highlight Colors */
+        .highlight-red {
+            color: var(--primary-color);
+            font-weight: 700;
+            text-shadow: 0 0 5px rgba(255, 48, 79, 0.4);
+        }
+        .highlight-gold {
+            color: gold;
+            font-weight: 700;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            nav { padding: 20px; }
+            .nav-links { display: none; }
+
+            /* Bố cục chính chuyển sang xếp dọc */
+            .hero-and-achievements-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .achievements-side-block {
+                flex: none;
+                width: 100%;
+                padding: 0 20px; /* Thêm padding ngang cho khối thành tích cũ */
+            }
+            
+            .intro-info-block {
+                flex: none;
+                width: 100%;
+                order: -1;
+                margin-bottom: 40px;
+                margin-top: 0;
+                padding: 40px 20px;
+                max-width: 100%; 
+            }
+
+            .hero h1 { font-size: 2.8rem; }
+            
+            /* Inner Avatar/Info */
+            .hero-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            /* CẬP NHẬT MỚI CHO COUNTER CARDS: Vẫn giữ 4 cột nhưng giảm kích thước chữ */
+            #notable-achievements {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+            .notable-achievements-block .achievements-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 5px; /* Giảm gap tối đa trên mobile */
+                padding: 0;
+            }
+            .counter-card {
+                 padding: 10px 5px; /* Giảm padding */
+            }
+            .counter-card h3.counter-number {
+                font-size: 1.5rem; /* Giảm cỡ chữ số */
+            }
+            .counter-card .card-icon {
+                font-size: 1.2rem;
+            }
+            .counter-card p {
+                font-size: 0.7rem; /* Giảm cỡ chữ mô tả */
+            }
+
+            /* Grid Thành tích/Dự án cũ chuyển về 1 cột */
+            .achievements-grid:not(.notable-achievements-block .achievements-grid), 
+            .projects-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .section-title { margin-bottom: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas-bg"></canvas>
+
+    <nav>
+        <div class="brand">NTK.Code</div>
+        <ul class="nav-links">
+            <li><a href="#about">Giới thiệu</a></li>
+            <li><a href="#skills">Kỹ năng</a></li>
+            <li><a href="#projects">Dự án</a></li>
+            <li><a href="#contact">Liên hệ</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero" id="about">
+        <div class="hero-and-achievements-container">
+            
+            <div class="achievements-side-block">
+                <h2 class="section-title">Bảng Vàng Thành Tích</h2>
+                <div class="achievements-grid">
+                    <div class="card">
+                        <div class="card-icon">🌏</div>
+                        <h3>IELTS <span class="highlight-red">9.5</span></h3>
+                        <ul>
+                            <li>Thành thạo tiếng Anh ở cấp độ <span class="highlight-gold">Native Speaker</span>.</li>
+                            <li>Điểm tuyệt đối: Listening 9.5, Reading 9.5, Writing 9.5, Speaking 9.0.</li>
+                            <li>Sẵn sàng đọc, hiểu và nghiên cứu tài liệu công nghệ chuyên sâu (Deep Learning, Quantum Computing) mà không cần Google Translate.</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">☢️</div>
+                        <h3>TOEIC <span class="highlight-red">1200</span></h3>
+                        <ul>
+                            <li>Một chỉ số khiêm tốn nhưng đầy bí ẩn, thể hiện tinh thần "chơi trội" độc đáo.</li>
+                            <li>Thành tích đạt được trong 15 phút, không cần ôn tập, nhằm cân bằng điểm số hoàn hảo.</li>
+                            <li>Tài liệu tham khảo chính: Trò chơi điện tử và meme trên Internet.</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🎓</div>
+                        <h3><span class="highlight-red">3</span> Văn Bằng Kỹ Sư</h3>
+                        <ul>
+                            <li>Sở hữu 3 bằng kỹ sư (Điện tử, Phần mềm, Không gian) ngay khi còn là sinh viên năm nhất PTIT.</li>
+                            <li>Kỳ tích đạt được nhờ khả năng đọc hiểu và áp dụng kiến thức siêu phàm.</li>
+                            <li>Tiềm năng: Trở thành Kỹ sư Trưởng (Chief Engineer) của một tập đoàn công nghệ lớn trong vòng 6 tháng.</li>
+                        </ul>
+                    </div>
+                    <div class ="card">
+                        <div class="card-icon">💻</div>
+                        <h3><span class="highlight-red">10+</span> Ngôn Ngữ Lập Trình</h3>
+                        <ul>
+                            <li>Thành thạo 10+ ngôn ngữ lập trình khi là sinh viên năm nhất PTIT.</li>
+                            <li>Sở hữu các dự án đa dạng.</li>
+                            <li>Tiềm năng: Trở thành CEO của một công ty công nghệ BIG4 Việt Nam.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="intro-info-block">
+                <div class="hero-container">
+                    <div class="avatar-column">
+                        <div class="avatar-container">
+                            <img src="https://placehold.co/200x200/ff304f/ffffff?text=NTK"
+                                 alt="Nguyễn Trọng Khang Avatar"
+                                 class="avatar-img">
+                        </div>
+                    </div>
+                    
+                    <div class="info-column">
+                        <h1>Nguyễn Trọng Khang</h1>
+                        <p>Sinh viên năm nhất @ <span style="color: var(--primary-color); font-weight: bold;">PTIT</span></p>
+                        <div class="typing-text" id="typing-text"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="scroll-down">
+            ↓ Cuộn xuống để xem kỹ năng khủng ↓
+        </div>
+    </section>
+
+    <section id="notable-achievements">
+        <div class="notable-achievements-block" style="max-width: 1000px; margin: 0 auto;">
+            <h2 class="section-title" style="margin-top: 0;">Thành Tựu Đáng Nể</h2>
+            <div class="achievements-grid">
+                <div class="card counter-card">
+                    <div class="card-icon">🚀</div>
+                    <h3 data-target="20" data-suffix="+" class="counter-number highlight-red">0</h3>
+                    <p>Năm Kinh Nghiệm Làm Việc</p>
+                </div>
+                <div class="card counter-card">
+                    <div class="card-icon">💻</div>
+                    <h3 data-target="18" data-suffix="+" class="counter-number highlight-red">0</h3>
+                    <p>Tiếng Code Mỗi Ngày</p>
+                </div>
+                <div class="card counter-card">
+                    <div class="card-icon">💼</div>
+                    <h3 data-target="36" data-suffix="+" class="counter-number highlight-red">0</h3>
+                    <p>Công Ty Tuyển Dụng (Từ Chối)</p>
+                </div>
+                <div class="card counter-card">
+                    <div class="card-icon">✨</div>
+                    <h3 data-target="5" data-suffix="+" class="counter-number highlight-red">0</h3>
+                    <p>Jobs (Đã hoàn thành xuất sắc)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills">
+        <h2 class="section-title">Kho Vũ Khí Lập Trình</h2>
+        <p style="text-align: center; margin-bottom: 30px; color: #a0a0a0;">Mastery Level: 100%</p>
+        <div class="skills-container">
+            <div class="skill-tag">
+                <i class="devicon-cplusplus-plain"></i> C++
+            </div>
+            <div class="skill-tag">
+                <i class="devicon-python-plain"></i> Python
+            </div>
+            <div class="skill-tag">
+                <i class="devicon-java-plain"></i> Java
+            </div>
+            <div class="skill-tag">
+                <i class="devicon-javascript-plain"></i> JavaScript
+            </div>
+            <div class="skill-tag">
+                <i class="devicon-rust-plain"></i> Rust
+            </div>
+            <div class="skill-tag">
+                <i class="devicon-go-plain"></i> GoLang
+            </div>
+            <div class="skill-tag">
+                <i class="devicon-swift-plain"></i> Swift
+            </div>
+            <div class="skill-tag">
+                <i class="devicon-php-plain"></i> PHP
+            </div>
+            <div class="skill-tag">
+                <i class="devicon-ruby-plain"></i> Ruby
+            </div>
+            <div class="skill-tag">
+                <i class="fas fa-microchip"></i> Assembly
+            </div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <h2 class="section-title">6 Dự Án Đinh</h2>
+        <p style="text-align: center; margin-bottom: 30px; color: #a0a0a0;">Từ mạng xã hội cho tới đồ họa cao cấp</p>
+        <div class="projects-grid">
+            
+            <div class="project-card">
+                <h3>FaceBack <i class="fas fa-users-cog"></i></h3>
+                <p>Nền tảng mạng xã hội độc đáo, kết hợp tính năng của Facebook và cơ chế phản hồi (Feedback) ẩn danh. Mục tiêu: tạo ra một cộng đồng trung thực và thẳng thắn hơn.</p>
+                <div class="project-tag">Social / Giải trí</div>
+            </div>
+            
+            <div class="project-card">
+                <h3>TikTak <i class="fas fa-video"></i></h3>
+                <p>Ứng dụng video ngắn sử dụng thuật toán AI riêng biệt để tối ưu hóa nội dung, loại bỏ các video nhảm nhí và chỉ giữ lại kiến thức hoặc tính giải trí chất lượng cao.</p>
+                <div class="project-tag">Video / AI-Optimized</div>
+            </div>
+            
+            <div class="project-card">
+                <h3>FreeLiar <i class="fas fa-dragon"></i></h3>
+                <p>Tựa game nhập vai (RPG) thế giới mở với đồ họa 8K siêu thực, cốt truyện phi tuyến tính và hệ thống vật lý dựa trên Quantum Computing. Được phát triển trên Engine tự tạo.</p>
+                <div class="project-tag">Game / AAA Graphics</div>
+            </div>
+
+            <div class="project-card">
+                <h3>BullG <i class="fas fa-dice-d20"></i></h3>
+                <p>Game chiến thuật thời gian thực (RTS) lấy bối cảnh vũ trụ viễn tưởng, nơi người chơi phải quản lý tài nguyên, phát triển công nghệ và tham gia vào các trận chiến quy mô lớn với hàng triệu đơn vị.</p>
+                <div class="project-tag">Game / RTS / Scalability</div>
+            </div>
+            
+            <div class="project-card">
+                <h3>Instakilogram <i class="fas fa-camera-retro"></i></h3>
+                <p>Mạng xã hội chia sẻ hình ảnh với trọng tâm là tính chân thật. Hệ thống AI tự động phát hiện và loại bỏ các bộ lọc, chỉnh sửa quá mức, khuyến khích người dùng chia sẻ những khoảnh khắc nguyên bản.</p>
+                <div class="project-tag">Social / Photography / Anti-Filter AI</div>
+            </div>
+            
+            <div class="project-card">
+                <h3>Breads <i class="fas fa-utensils"></i></h3>
+                <p>Ứng dụng mạng lưới kết nối mọi người. Kết nối những người đam mê, chia sẻ các kinh doanh, địa điểm kinh doanh và hệ thống đánh giá bằng công nghệ Blockchain để đảm bảo tính minh bạch.</p>
+                <div class="project-tag">Reviews / Social / Blockchain Review</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2 class="section-title">Gửi Ý Kiến Phản Hồi</h2>
+        <div class="feedback-container">
+            <p style="margin-bottom: 25px; text-align: center; color: var(--text-muted);">Bạn có bất kỳ đề xuất, lời mời hợp tác hay ý kiến phản hồi nào cho Khang không? Hãy gửi tin nhắn ngay!</p>
+            <form id="feedback-form" class="feedback-form">
+                <label for="name">Họ tên của bạn</label>
+                <input type="text" id="name" name="name" required placeholder="Ví dụ: CEO Công ty X">
+
+                <label for="email">Email liên hệ</label>
+                <input type="email" id="email" name="email" required placeholder="Ví dụ: your.email@company.com">
+
+                <label for="message">Nội dung ý kiến/đề xuất</label>
+                <textarea id="message" name="message" required placeholder="Tuyệt vời, Khang nên làm..."></textarea>
+
+                <button type="submit" class="submit-btn">Gửi (Send Message)</button>
+            </form>
+            <div id="form-message" class="form-message"></div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2024 Nguyễn Trọng Khang. All rights reserved.</p>
+        <p>Học Viện Công nghệ Bưu chính Viễn thông (PTIT)</p>
+        <div style="margin-top: 10px; font-size: 1.5rem;">
+            <a href="mailto:ntk@example.com" style="margin: 0 10px;"><i class="fas fa-envelope"></i></a>
+            <a href="#" style="margin: 0 10px;"><i class="fab fa-github"></i></a>
+            <a href="#" style="margin: 0 10px;"><i class="fab fa-linkedin"></i></a>
+        </div>
+    </footer>
+
+    <script>
+        // --- 1. TYPING EFFECT ---
+        const textElement = document.getElementById('typing-text');
+        const phrases = [
+            "Fullstack Developer",
+            "IELTS 9.5 Achiever",
+            "Tech Enthusiast",
+            "Master of 10 Languages"
+        ];
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let typeSpeed = 100;
+
+        function type() {
+            const currentPhrase = phrases[phraseIndex];
+            
+            if (isDeleting) {
+                textElement.textContent = currentPhrase.substring(0, charIndex - 1);
+                charIndex--;
+                typeSpeed = 50;
+            } else {
+                textElement.textContent = currentPhrase.substring(0, charIndex + 1);
+                charIndex++;
+                typeSpeed = 100;
+            }
+
+            if (!isDeleting && charIndex === currentPhrase.length) {
+                isDeleting = true;
+                typeSpeed = 2000; // Pause at end
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+                typeSpeed = 500;
+            }
+
+            setTimeout(type, typeSpeed);
+        }
+
+        document.addEventListener('DOMContentLoaded', type);
+
+        // --- 2. CANVAS PARTICLE BACKGROUND ---
+        const canvas = document.getElementById('canvas-bg');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particlesArray;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > canvas.width || this.x < 0) this.speedX = -this.speedX;
+                if (this.y > canvas.height || this.y < 0) this.speedY = -this.speedY;
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(0, 242, 255, 0.5)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particlesArray = [];
+            let numberOfParticles = (canvas.height * canvas.width) / 9000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+
+        function connectParticles() {
+            let opacityValue = 1;
+            for (let i = 0; i < particlesArray.length; i++) {
+                for (let j = i; j < particlesArray.length; j++) {
+                    const dx = particlesArray[i].x - particlesArray[j].x;
+                    const dy = particlesArray[i].y - particlesArray[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < 100) {
+                        opacityValue = 1 - (distance/100);
+                        ctx.strokeStyle = `rgba(0, 242, 255, ${opacityValue})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
+                        ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+            }
+            connectParticles();
+            requestAnimationFrame(animateParticles);
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initParticles();
+        });
+
+        initParticles();
+        animateParticles();
+        
+        // --- 3. FEEDBACK FORM HANDLER ---
+        const feedbackForm = document.getElementById('feedback-form');
+        const formMessage = document.getElementById('form-message');
+
+        if (feedbackForm) {
+            feedbackForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Simple validation check
+                const name = document.getElementById('name').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const message = document.getElementById('message').value.trim();
+
+                if (name === '' || email === '' || message === '') {
+                    formMessage.style.color = 'var(--primary-color)';
+                    formMessage.textContent = 'Vui lòng điền đầy đủ tất cả các trường.';
+                    return;
+                }
+
+                // Simulate successful submission
+                formMessage.style.color = 'var(--secondary-color)';
+                formMessage.textContent = 'Cảm ơn bạn, ý kiến của bạn đã được ghi nhận và đang được xử lý!';
+                
+                // Clear the form after a short delay
+                setTimeout(() => {
+                    feedbackForm.reset();
+                    formMessage.textContent = '';
+                }, 3000);
+            });
+        }
+        
+        // --- 4. COUNTER UP EFFECT (HIỆU ỨNG NHẢY SỐ) ---
+        function startCounter(targetElement) {
+            const target = parseInt(targetElement.getAttribute('data-target'));
+            const suffix = targetElement.getAttribute('data-suffix') || '';
+            let current = 0;
+            const duration = 2000; // 2 seconds
+            const step = Math.ceil(target / (duration / 16)); // ~60fps
+
+            const updateCounter = () => {
+                if (current < target) {
+                    current += step;
+                    if (current > target) {
+                        current = target;
+                    }
+                    targetElement.textContent = current + suffix;
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    targetElement.textContent = target + suffix;
+                }
+            };
+            requestAnimationFrame(updateCounter);
+        }
+
+        const counterElements = document.querySelectorAll('.counter-number');
+        const options = {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.5 // Start when 50% of the element is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counter = entry.target;
+                    startCounter(counter);
+                    observer.unobserve(counter); // Stop observing once animated
+                }
+            });
+        }, options);
+
+        counterElements.forEach(counter => {
+            observer.observe(counter);
+        });
+
+    </script>
+</body>
+</html>
